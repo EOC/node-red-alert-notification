@@ -1,0 +1,23 @@
+{
+    "name": "node-red-alert-notification",
+    "version": "1.0.0",
+    "description": "A NODE-RED node for IBM Alert Notification.",
+    "dependencies": {
+        "cfenv": "~1.0.0",
+        "request": "~2.53.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EOC/node-red-alert-notification.git"
+    },
+    "license": "Apache-2.0",
+    "keywords": [
+        "node-red",
+        "bluemix"
+    ],
+    "node-red": {
+        "nodes": {
+            "alert notification": "alert_notification/alert_notification.js",
+        }
+    }
+}

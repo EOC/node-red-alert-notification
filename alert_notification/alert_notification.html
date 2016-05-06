@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+
+<script type="text/x-red" data-template-name="alert_notification">
+    <div id="credentials-check" class="form-row">
+        <div class="form-tips">
+            <i class="fa fa-question-circle"></i><b> Please wait: </b> Checking for bound service credentials...
+        </div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row credentials" style="display: none;">
+        <label for="node-input-username"><i class="fa fa-user"></i> Username</label>
+        <input type="text" id="node-input-username" placeholder="Username">
+    </div>
+    <div class="form-row credentials" style="display: none;">
+        <label for="node-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-input-password" placeholder="Password">
+    </div>
+    <div class="form-row">
+        <label for="node-input-what"><i class="fa fa-question"></i> What</label>
+        <input type="text" id="node-input-what" placeholder="What">
+    </div>
+    <div class="form-row">
+        <label for="node-input-where"><i class="fa fa-tag"></i> Where</label>
+        <input type="text" id="node-input-where" placeholder="Where">
+    </div>
+    <div class="form-row">
+        <label for="node-input-severity"><i class="fa fa-question"></i> Severity</label>
+        <select type="text" id="node-input-severity" style="display: inline-block; width: 70%;" >
+            <option value="Indeterminate">Indeterminate</option>
+            <option value="Warning">Warning</option>
+            <option value="Minor">Minor</option>
+            <option value="Major">Major</option>
+            <option value="Critical">Critical</option>
+            <option value="Fatal">Fatal</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="alert_notification">
+    <p>IBM Alert Notification is designed to instantly deliver notifications of problem occurrences in your IT operations using automated email, SMS and voice messaging.</p>
+    <p>It allows you to use custom groups to send alerts to the appropriate people for a problem or class of problem. Groups can be created based on administrative roles, application names, department names or other criteria.</p>
+    <p>Custom filters can be created for alerting different users based on incident type and severity.</p>
+    <p>Alerts can be sent using <code>msg.payload</code>. This <code>msg.payload</code> value must be a valid JSON object, with <code>msg.payload.What</code>, <code>msg.payload.Where</code> and <code>msg.payload.Severity</code> attributes.</p>
+    <p>For more information about IBM Alert Notification service, read the <a href="http://www-03.ibm.com/software/products/en/ibm-alert-notification" target="_new">documentation</a> or the <a href="https://ibmnotifybm.mybluemix.net/docs/alerts/v1">Swagger UI</a>.</p>
+</script>
+
+<script type="text/javascript">
+    (function() {
+        RED.nodes.registerType('alert_notification', {
+            category: 'output',
+            defaults: {
+                name: {value: ""},
+            },
+            credentials: {
+                username: {type:"text"},
+                password: {type:"password"}
+            },
+            color: "rgb(192, 222, 237)",
+            inputs: 1,
+            outputs: 0,
+            icon: "alert_notification.png",
+            align: "right",
+            paletteLabel: "alert notification",
+            label: function() {
+                return this.name || "alert notification";
+            },
+            labelStyle: function() {
+                return this.name ? "node_label_italic" : "";
+            },
+            oneditprepare: function() {
+                $.getJSON('alert_notification/vcap/')
+                  .done(function (service) {
+                      $('.credentials').toggle(!service);
+                  })
+                  .fail(function () {
+                      $('.credentials').show();
+                  }).always(function () {
+                      $('#credentials-check').hide();
+                  })
+            }
+        });
+    })();
+</script>
