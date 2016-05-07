@@ -48,18 +48,31 @@ module.exports = function(RED) {
             if (!payloadIsValidAlert(msg.payload))
                 return;
 
+			var alert = {};
+			alert['Where'] = msg.payload.Where;
+			alert['What'] = msg.payload.What;
+			alert['Severity'] = msg.payload.Severity;
+			
             var request = require('request');
 
             node.status({fill:"red", shape:"dot", text:"requesting"});
             
-            request({url: host, auth: {username: username, password: password}, qs: {What: msg.payload.What, Where: msg.payload.Where, Severity: msg.payload.Severity}}, function(error, response, body) {
+            request({
+	            		method: 'POST', 
+	            		url: host,
+	            		headers: {
+        					"content-type": "application/json",
+    					},
+	            		auth: {username: username, password: password}, 
+	            		body: JSON.stringify(alert)
+            		}, function(error, response, body) {
                 node.status({});
                 if (!error && response.statusCode == 200) {
-                    var results = JSON.parse(body);
-                    node.send(results);
+					node.info('Successfully sent alert to Alert Notification service');
                 } else {
                     var message2 = 'IBM Alert Notification service call failed with error HTTP response.';
-                    node.error(message2, msg);
+                    node.error(message2);
+                    node.error(JSON.stringify(response));
                 }
             });
         });

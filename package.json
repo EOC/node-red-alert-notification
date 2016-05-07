@@ -17,7 +17,7 @@
     ],
     "node-red": {
         "nodes": {
-            "alert notification": "alert_notification/alert_notification.js",
+            "alert notification": "alert_notification/alert_notification.js"
         }
     }
 }
