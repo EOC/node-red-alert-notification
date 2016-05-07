@@ -68,7 +68,8 @@ module.exports = function(RED) {
             		}, function(error, response, body) {
                 node.status({});
                 if (!error && response.statusCode == 200) {
-					node.info('Successfully sent alert to Alert Notification service');
+					var results = JSON.parse(body);
+                    node.send(results);
                 } else {
                     var message2 = 'IBM Alert Notification service call failed with error HTTP response.';
                     node.error(message2);
